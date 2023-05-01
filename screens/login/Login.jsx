@@ -34,7 +34,7 @@ const Login = () => {
   }, []);
   function handleSubmit() {
     if (user.name === "" || user.password === "") {
-      Vibration.vibrate(1000);
+      Vibration.vibrate(100);
       showSnackbar("Please enter all the required fields", "error");
       return;
     }

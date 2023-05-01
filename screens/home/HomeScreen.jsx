@@ -25,10 +25,10 @@ const HomeScreen = () => {
     });
   }, []);
   return (
-    <ImageBackground source={require("../../assets/images/purpleBg.jpg")}>
+    <View className="bg-[#4002ca]">
       <SafeAreaView>
         <ScrollView>
-          <View className="m-4 flex-row items-center px-2 ">
+          <View className="m-4 flex-row items-center px-2">
             <Text
               className="text-white flex-1 text-2xl"
               style={{ fontFamily: appTheme.fonts.alefBold }}
@@ -45,7 +45,11 @@ const HomeScreen = () => {
               keyExtractor={(item, index) => Math.random() + item.name + index}
               data={userStripeDummyData}
               renderItem={({ item, index }) => (
-                <TouchableOpacity key={item.name + index} className="pr-5">
+                <TouchableOpacity
+                  onLongPress={() => alert(`Delete ${item.name}`)}
+                  key={item.name + index}
+                  className="pr-5"
+                >
                   <Image
                     source={item.image}
                     className="h-16 w-16 bg-violet-500 rounded-lg "
@@ -63,7 +67,7 @@ const HomeScreen = () => {
           {/* -------------------------------------------------------------------------------------- */}
           <View>
             <View
-              className="bg-white mt-10 w-full "
+              className="bg-white mt-1 w-full "
               style={{ borderTopLeftRadius: 30, borderTopRightRadius: 30 }}
             >
               <View className="mt-6 p-2">
@@ -84,6 +88,7 @@ const HomeScreen = () => {
                       className="h-16 w-16 m-4 ml-3 rounded-full"
                     />
                     <TouchableOpacity
+                      onLongPress={() => alert(`Delete ${item.name}`)}
                       style={{ width: Dimensions.get("screen").width - 120 }}
                       onPress={() =>
                         navigation.navigate("Chat", {
@@ -120,14 +125,14 @@ const HomeScreen = () => {
           height: 50,
           width: 50,
           borderRadius: 100,
-          backgroundColor: "#8a1c78",
+          backgroundColor: "#4002ca",
           alignItems: "center",
           justifyContent: "center",
         }}
         iconColor="white"
         size={35}
       />
-    </ImageBackground>
+    </View>
   );
 };
 

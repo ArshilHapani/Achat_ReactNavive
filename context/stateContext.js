@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from "react";
 const stateContext = createContext();
 
 export const ContextProvider = ({ children }) => {
+  const [user, setUser] = useState("Arshil");
   const [snackbar, setSnackbar] = useState({
     message: "",
     type: "",
@@ -22,7 +23,9 @@ export const ContextProvider = ({ children }) => {
     }, 4000);
   }
   return (
-    <stateContext.Provider value={{ snackbar, showSnackbar, setSnackbar }}>
+    <stateContext.Provider
+      value={{ snackbar, showSnackbar, setSnackbar, user }}
+    >
       {children}
     </stateContext.Provider>
   );

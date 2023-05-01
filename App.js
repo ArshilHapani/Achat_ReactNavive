@@ -9,14 +9,15 @@ import {
   Login,
   SplashScreen as SplashScreenComponent,
 } from "./screens";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import Snackbar from "./components/Snackbar";
-import { ContextProvider } from "./context/stateContext";
+import { ContextProvider, useStateContext } from "./context/stateContext";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [appUser, setAppUser] = useState(true);
   const [fontsLoaded] = useFonts({
     "Acme-Regular": require("./assets/fonts/Acme-Regular.ttf"),
     "Alef-Regular": require("./assets/fonts/Alef/Alef-Regular.ttf"),
@@ -39,10 +40,17 @@ export default function App() {
       <ContextProvider>
         <NavigationContainer onReady={onLayoutRootView}>
           <Stack.Navigator>
-            <Stack.Screen name="Splash" component={SplashScreenComponent} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Chat" component={ChatScreen} />
+            {!appUser ? (
+              <>
+                <Stack.Screen name="Splash" component={SplashScreenComponent} />
+                <Stack.Screen name="Login" component={Login} />
+              </>
+            ) : (
+              <>
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Chat" component={ChatScreen} />
+              </>
+            )}
           </Stack.Navigator>
         </NavigationContainer>
         <Snackbar />

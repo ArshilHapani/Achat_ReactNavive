@@ -8,21 +8,23 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import {
-  AntDesign,
-  Feather,
-  Ionicons,
-  MaterialIcons,
-  SimpleLineIcons,
-} from "@expo/vector-icons";
+import { FontAwesome, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import { appTheme } from "../../utils/theme";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ChatScreen = () => {
   const navigator = useNavigation();
   const router = useRoute();
   const { name, message, image, time } = router.params;
+  const [chatMessage, setChatMessage] = useState([
+    {
+      message: "",
+      time: "",
+      fromMe: true,
+    },
+  ]);
   useLayoutEffect(() => {
     navigator.setOptions({
       headerShown: false,
@@ -30,154 +32,109 @@ const ChatScreen = () => {
     });
   }, []);
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View className="flex-1">
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss}>
+      <>
         {/* Heder */}
-        <View className="bg-white w-full">
-          <View className="flex-row mx-3 mt-6 mb-2 items-start justify-between">
+        <SafeAreaView
+          className="bg-[#4002ca] w-full py-3"
+          style={{
+            shadowColor: "#000000",
+            shadowOffset: {
+              width: 0,
+              height: 7,
+            },
+            shadowOpacity: 0.21,
+            shadowRadius: 7.68,
+            elevation: 10,
+            borderBottomLeftRadius: 30,
+            borderBottomRightRadius: 30,
+          }}
+        >
+          <View className="flex-row mx-3 my-6 mb-3 items-center">
             <TouchableOpacity>
               <Ionicons
-                name="ios-arrow-back"
+                name="chevron-back"
                 onPress={() => navigator.goBack()}
-                size={24}
-                color="black"
+                size={23}
+                color="#e5e5e5"
               />
             </TouchableOpacity>
-            <View className="justify-center items-center">
-              <Image
-                source={image}
-                style={{ width: 50, height: 50, borderRadius: 100 }}
-              />
-              <Text
-                className="text-xl"
-                style={{ fontFamily: appTheme.fonts.alefReg }}
-              >
-                {name}
-              </Text>
-              <Text className="text-gray-500">Active now</Text>
+            <View className="flex-row flex-1 items-center">
+              <View className="shadow-lg">
+                <Image
+                  source={image}
+                  style={{
+                    marginHorizontal: 8,
+                    width: 50,
+                    height: 50,
+                    borderRadius: 15,
+                  }}
+                />
+              </View>
+              <View className="ml-2 justify-start">
+                <Text
+                  className="text-xl text-white"
+                  style={{ fontFamily: appTheme.fonts.alefReg }}
+                >
+                  {name}
+                </Text>
+                <Text className="text-gray-300">Active now</Text>
+              </View>
             </View>
-            <TouchableOpacity>
-              <SimpleLineIcons name="options" size={24} color="black" />
+            <View className="flex-row gap-6">
+              <TouchableOpacity>
+                <Ionicons name="call" size={24} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <SimpleLineIcons
+                  name="options-vertical"
+                  size={24}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </SafeAreaView>
+        <View className="flex-1" onPress={Keyboard.dismiss}>
+          <View className="flex-1">
+            {chatMessage.map((message, index) => (
+              <View key={message.time + index + Math.random()}>
+                <Text>{message}</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* send message text input */}
+          <View
+            style={{
+              shadowColor: "#000000",
+              shadowOffset: {
+                width: 0,
+                height: 7,
+              },
+              shadowOpacity: 0.21,
+              shadowRadius: 7.68,
+              elevation: 10,
+            }}
+            className="bg-white pl-4 pr-1 py-2 rounded-3xl rounded-tr-lg mx-3 mb-3 shadow-2xl flex-row items-center"
+          >
+            <TouchableOpacity className="mr-3">
+              <Ionicons name="add" size={24} color="#4002ca" />
+            </TouchableOpacity>
+            <TextInput
+              className="flex-1"
+              placeholder="Type your message here"
+              cursorColor="#4002ca"
+            />
+            <TouchableOpacity
+              className="bg-[#4002ca]  w-14 h-11 items-center justify-center"
+              style={{ borderRadius: 20, borderTopRightRadius: 10 }}
+            >
+              <FontAwesome name="send" size={20} color="white" />
             </TouchableOpacity>
           </View>
         </View>
-        <ImageBackground
-          className="h-full w-full"
-          source={require("../../assets/images/purpleBg.jpg")}
-        >
-          <View
-            className="bg-white h-[55%] w-full relative "
-            style={{ borderBottomRightRadius: 40, borderBottomLeftRadius: 40 }}
-          >
-            <View className="flex-row w-full ">
-              <Image source={image} className="h-8 w-8 rounded-full ml-3 " />
-              <View
-                className="bg-gray-300 p-4 w-[30%] ml-2 rounded-lg"
-                style={{
-                  borderTopLeftRadius: 30,
-                  borderBottomRightRadius: 30,
-                  borderTopRightRadius: 30,
-                }}
-              >
-                <Text>Hey boy!</Text>
-              </View>
-            </View>
-
-            <View className="flex-row right-[-26%] w-full absolute mt-20">
-              <View className="p-4 rounded-lg ">
-                <View
-                  className="bg-purple-800 p-4"
-                  style={{
-                    borderTopRightRadius: 30,
-                    borderBottomLeftRadius: 30,
-                    borderTopLeftRadius: 30,
-                  }}
-                >
-                  <Text className="text-white">{message}</Text>
-                </View>
-                <Text className="text-right text-gray-400">Delivered</Text>
-              </View>
-              <Image
-                source={require("../../assets/images/naruto.jpg")}
-                className="h-8 w-8 rounded-full "
-              />
-            </View>
-
-            <View className="bottom-4 w-full absolute">
-              <View className="bg-gray-200 mx-4 flex-row pl-8 py-2 rounded-full">
-                <TextInput
-                  placeholder="Type your message here"
-                  className="flex-1"
-                  cursorColor="#c670ff"
-                />
-                <TouchableOpacity className="bg-pink-700 h-10 w-10 items-center mx-2 justify-center rounded-full ">
-                  <Ionicons name="send" size={20} color="white" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-
-          {/* Bottom tabs */}
-          <View className="w-full ">
-            <View className="flex-row gap-4 mt-2 justify-center  ">
-              <TouchableOpacity
-                className="h-20 w-20 rounded-full items-center justify-center"
-                style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
-              >
-                <Feather name="camera" size={24} color="#f7ebfd" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="h-20 w-20 rounded-full items-center justify-center"
-                style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
-              >
-                <Feather name="image" size={24} color="#f7ebfd" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="h-20 w-20 rounded-full items-center justify-center"
-                style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
-              >
-                <Feather name="video" size={24} color="#f7ebfd" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="h-20 w-20 rounded-full items-center justify-center"
-                style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
-              >
-                <Ionicons
-                  name="document-text-outline"
-                  size={24}
-                  color="#f7ebfd"
-                />
-              </TouchableOpacity>
-            </View>
-            <View className="flex-row gap-4 my-2 justify-center">
-              <TouchableOpacity
-                className="h-20 w-20 rounded-full items-center justify-center"
-                style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
-              >
-                <Ionicons name="location-outline" size={24} color="#f7ebfc" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="h-20 w-20 rounded-full items-center justify-center"
-                style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
-              >
-                <AntDesign name="contacts" size={24} color="#f7ebfc" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="h-20 w-20 rounded-full items-center justify-center"
-                style={{ backgroundColor: "rgba(255,255,255,0.5)" }}
-              >
-                <Feather name="mic" size={24} color="#f7ebfd" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="h-20 w-20 rounded-full items-center justify-center"
-                style={{ backgroundColor: "rgba(255,255,255,0.9)" }}
-              >
-                <SimpleLineIcons name="options" size={24} color="gray" />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ImageBackground>
-      </View>
+      </>
     </TouchableWithoutFeedback>
   );
 };
