@@ -9,4 +9,8 @@ export const appTheme = {
     adventItalic: "AdventPro-italic",
     adventVariable: "AdventPro-variableFont",
   },
+  width: {
+    chatBubbleMaxWidth: (messageLength) => messageLength % 100,
+  },
+  mediumFontSize: 17,
 };
